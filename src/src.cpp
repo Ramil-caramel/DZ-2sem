@@ -41,6 +41,12 @@ bool BSTree::add_element(int v){
     }
 }
 
+BSTree::BSTree(std::initializer_list<int> list){
+    for(std::initializer_list<int>::iterator itr = list.begin() ; itr != list.end() ;++itr){
+        this->add_element(*itr);
+    }
+}
+
 void BSTree::print(){
     print(root);
     std::cout << std::endl;

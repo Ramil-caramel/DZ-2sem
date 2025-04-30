@@ -3,9 +3,12 @@
 
 int main() {
     BSTree t;
+    BSTree tree{10, 4, 20, 1, 5};
+    tree.print();
+    std::cout << std::endl;
     t.load_from_file("./BSTree_output.txt");
     t.print();
-    std::cout << "qwe" << std::endl;
+    std::cout << std::endl;
     t.add_element(20);
     t.add_element(30);
     t.add_element(10);
@@ -15,7 +18,6 @@ int main() {
     t.add_element(7);
     t.print();
     t.save_to_file("");
-    std::cout << t.find_element(7) << std::endl;
 
     return 0;
 }
