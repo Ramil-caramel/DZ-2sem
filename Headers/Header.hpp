@@ -46,7 +46,4 @@ public:
     bool delete_element(int value);
 
     ~BSTree();
-    /*
-	bool delete_element(int value); // функция удаления
-    */
 };

@@ -42,6 +42,7 @@ bool BSTree::add_element(int v){
 }
 
 BSTree::BSTree(std::initializer_list<int> list){
+    root = nullptr;
     for(std::initializer_list<int>::iterator itr = list.begin() ; itr != list.end() ;++itr){
         this->add_element(*itr);
     }
@@ -135,19 +136,22 @@ bool BSTree::find_element(int value){
 
 Node* BSTree::find_element_ptr(int v){
     Node* ptr_child = root;
+    Node* ptr_parent = nullptr;
 
+    
     while(ptr_child != nullptr) {
-
         if (ptr_child->value > v){
+            ptr_parent = ptr_child;
             ptr_child = ptr_child->left_ptr;
         }
 
         else if(ptr_child->value < v){
+            ptr_parent = ptr_child;
             ptr_child = ptr_child->right_ptr;
         }
 
         else{
-                return ptr_child;
+            return ptr_parent;
         } 
     }
     return nullptr;
@@ -155,13 +159,95 @@ Node* BSTree::find_element_ptr(int v){
 
 
 bool BSTree::delete_element(int value){
-    //1
     Node* ptr_f = find_element_ptr(value);
-    if (!ptr_f) return false;
-    //2
-    if (!(ptr_f->left_ptr) && !(ptr_f->right_ptr)){
-        delete ptr_f;
+
+    //1 нет такого узла
+    if (!ptr_f && root->value != value){
+        std::cout << "нет такого узла" << std::endl;
+        return false;
+    } 
+
+    if (root ->value != value){    
+    if (ptr_f->value > value){
+        Node* ptr_f_left = ptr_f->left_ptr;
+        //2 у узла нет детей
+        if (!(ptr_f_left->left_ptr) && !(ptr_f_left->right_ptr)){
+            delete ptr_f_left;
+            ptr_f->left_ptr = nullptr;
+            return true;
+        }
+        //3 у узла только один ребенок
+        if(!(ptr_f_left->left_ptr) || !(ptr_f_left->right_ptr)){
+            if(!(ptr_f_left->left_ptr)){
+                ptr_f->left_ptr = ptr_f_left->right_ptr;
+                ptr_f_left->right_ptr = nullptr;
+                delete ptr_f_left;
+                return true;
+            }
+            if(!(ptr_f_left->right_ptr)){
+                ptr_f->left_ptr = ptr_f_left->left_ptr;
+                ptr_f_left->left_ptr = nullptr;
+                delete ptr_f_left;
+                return true;
+            }
+        }
     }
+    if (ptr_f->value < value){
+        Node* ptr_f_right = ptr_f->right_ptr;
+        //2 у узла нет детей
+        if (!(ptr_f_right->left_ptr) && !(ptr_f_right->right_ptr)){
+            delete ptr_f_right;
+            ptr_f->right_ptr = nullptr;
+            return true;
+        }
+        //3 у узла только один ребенок
+        if(!(ptr_f_right->left_ptr) || !(ptr_f_right->right_ptr)){
+            if(!(ptr_f_right->left_ptr)){
+                ptr_f->right_ptr = ptr_f_right->right_ptr;
+                ptr_f_right->right_ptr = nullptr;
+                delete ptr_f_right;
+                return true;
+            }
+            if(!(ptr_f_right->right_ptr)){
+                ptr_f->right_ptr = ptr_f_right->left_ptr;
+                ptr_f_right->left_ptr = nullptr;
+                delete ptr_f_right;
+                return true;
+            }
+        }
+    }
+}
+    // 4
+    //ptr_f - родитель ноды которую нужно удалить
+    //ptr_f_child - сама эта нода
+    //ptr_zamena - родитель для замены
+    
+    Node *ptr_f_child, *ptr_zamena;
+    ptr_f_child = root;
+    if(root->value != value){
+        if (ptr_f->value > value) ptr_f_child = ptr_f->left_ptr;
+        else  ptr_f_child = ptr_f->right_ptr;
+    }
+    ptr_zamena = ptr_f_child -> right_ptr;
+    
+    Node* ptr_zamena_child = ptr_zamena;
+    while( ptr_zamena_child->left_ptr != nullptr) {
+        ptr_zamena = ptr_zamena_child;
+        ptr_zamena_child = ptr_zamena_child -> left_ptr;
+        
+    }
+
+    int a = ptr_zamena_child->value;
+    
+    this -> delete_element(ptr_zamena_child->value);
+    if(root->value != value){
+        ptr_f_child -> value = a; 
+    }    
+    else{
+        root->value = a;
+    }
+    return true;
+
 }
 
 BSTree::~BSTree(){

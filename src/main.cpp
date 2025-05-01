@@ -2,10 +2,21 @@
 #include "Header.hpp"
 
 int main() {
-    BSTree t;
-    BSTree tree{10, 4, 20, 1, 5};
+    
+    BSTree tree = {10, 5, 15, 4, 7, 14, 20, 21, 13};
     tree.print();
+
+    std::cout << tree.delete_element(10) << std::endl;
+    tree.print();
+
+
     std::cout << std::endl;
+
+
+
+
+/*
+    BSTree t;
     t.load_from_file("./BSTree_output.txt");
     t.print();
     std::cout << std::endl;
@@ -18,7 +29,7 @@ int main() {
     t.add_element(7);
     t.print();
     t.save_to_file("");
-
+*/
     return 0;
 }
 
